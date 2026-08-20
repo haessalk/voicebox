@@ -1,0 +1,19 @@
+.footer {
+  padding: var(--sp-xl) var(--sp-md);
+  text-align: center;
+  border-top: 1px solid var(--border);
+  margin-top: var(--sp-2xl);
+}
+.orgName {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: var(--sp-sm);
+}
+.desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 420px;
+  margin: 0 auto;
+}

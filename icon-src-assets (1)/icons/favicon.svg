@@ -1,0 +1,10 @@
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <rect x="16" y="16" width="480" height="480" rx="120" fill="#7A4FE0"/>
+  <g transform="rotate(0 256 256)"><path d="M256 85.3 L290.1 115.2 L290.1 157.9 L221.9 157.9 L221.9 115.2 Z" fill="#FFFFFF"/></g>
+  <g transform="rotate(60 256 256)"><path d="M256 85.3 L290.1 115.2 L290.1 157.9 L221.9 157.9 L221.9 115.2 Z" fill="#FFFFFF"/></g>
+  <g transform="rotate(120 256 256)"><path d="M256 85.3 L290.1 115.2 L290.1 157.9 L221.9 157.9 L221.9 115.2 Z" fill="#FFFFFF"/></g>
+  <g transform="rotate(180 256 256)"><path d="M256 85.3 L290.1 115.2 L290.1 157.9 L221.9 157.9 L221.9 115.2 Z" fill="#FFFFFF"/></g>
+  <g transform="rotate(240 256 256)"><path d="M256 85.3 L290.1 115.2 L290.1 157.9 L221.9 157.9 L221.9 115.2 Z" fill="#FFFFFF"/></g>
+  <g transform="rotate(300 256 256)"><path d="M256 85.3 L290.1 115.2 L290.1 157.9 L221.9 157.9 L221.9 115.2 Z" fill="#FFFFFF"/></g>
+  <circle cx="256" cy="256" r="23.5" fill="#FFFFFF"/>
+</svg>

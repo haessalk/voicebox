@@ -1,0 +1,18 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+}
+.chip {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  border-radius: var(--r-default);
+  padding: var(--sp-sm) var(--sp-md);
+  font-size: 13px;
+  font-weight: 600;
+}
+.chip.active[data-status='전체'] { background: var(--text); border-color: var(--text); color: #fff; }
+.chip.active[data-status='접수'] { background: var(--primary-container); border-color: var(--primary-container); color: var(--on-primary-container); }
+.chip.active[data-status='처리중'] { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+.chip.active[data-status='완료'] { background: var(--secondary-container); border-color: var(--secondary-container); color: var(--on-secondary-container); }

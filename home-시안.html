@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>우리 동네 목소리함 — 홈 화면 시안</title>
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>
+  :root{
+    --primary:#7A4FE0;
+    --primary-hover:#6A3FD0;
+    --primary-container:#EDE5FF;
+    --on-primary:#FFFFFF;
+    --on-primary-container:#4A2E96;
+    --secondary:#2FAE72;
+    --secondary-container:#E1F5EA;
+    --on-secondary:#FFFFFF;
+    --on-secondary-container:#1C6B45;
+    --bg:#F8F5FF;
+    --surface:#FFFFFF;
+    --text:#241B3A;
+    --text-muted:#6B5E8A;
+    --border:#E4DAFB;
+    --shadow-sm:0 1px 3px rgba(122,79,224,0.10);
+    --shadow-md:0 6px 16px rgba(122,79,224,0.14);
+    --shadow-lg:0 16px 32px rgba(122,79,224,0.18);
+    --r-sm:8px;
+    --r-default:12px;
+    --r-md:14px;
+    --r-lg:20px;
+    --r-full:999px;
+    --placeholder-bg:#E7E2F2;
+    --placeholder-icon:#B0A3D6;
+    --font-display:'Jua','Pretendard',system-ui,sans-serif;
+    --font-body:'Pretendard',-apple-system,'Malgun Gothic',sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{display:block;}
+  button{font-family:inherit;cursor:pointer;}
+  h1,h2,h3,p{margin:0;}
+
+  /* ── 안 전환 스위처 (시안 검토용, 실제 화면 아님) ───────────── */
+  .switcher{
+    position:sticky;top:0;z-index:200;
+    display:flex;
+    background:var(--text);
+  }
+  .switcher button{
+    flex:1;
+    border:none;background:transparent;
+    color:rgba(255,255,255,.62);
+    padding:10px 8px 9px;
+    border-bottom:3px solid transparent;
+    text-align:center;
+    transition:background .15s ease,color .15s ease;
+  }
+  .switcher button strong{display:block;font-size:13.5px;font-weight:700;color:inherit;}
+  .switcher button span{display:block;font-size:11px;margin-top:2px;color:inherit;opacity:.85;}
+  .switcher button.active{
+    color:#fff;
+    background:rgba(255,255,255,.08);
+    border-bottom-color:var(--secondary);
+  }
+  .switcher button:not(.active):hover{color:#fff;background:rgba(255,255,255,.05);}
+
+  /* ── 각 안 공통 ───────────────────────────────────────── */
+  .draft{display:none;}
+  .draft.active{display:block;}
+
+  .site-header{
+    display:flex;align-items:center;gap:10px;
+    padding:14px 20px;
+    background:var(--surface);
+    border-bottom:1px solid var(--border);
+  }
+  .site-header img{width:32px;height:32px;border-radius:var(--r-sm);flex:0 0 auto;}
+  .site-header .org-name{
+    font-size:15px;font-weight:700;color:var(--text);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+
+  .site-footer{
+    padding:36px 20px 44px;
+    text-align:center;
+    border-top:1px solid var(--border);
+    margin-top:8px;
+  }
+  .site-footer .foot-org{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px;}
+  .site-footer .foot-desc{font-size:12.5px;color:var(--text-muted);line-height:1.6;max-width:420px;margin:0 auto 10px;}
+  .site-footer .foot-copy{font-size:11.5px;color:var(--text-muted);opacity:.75;}
+
+  .btn-primary{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    background:var(--primary);color:var(--on-primary);
+    font-size:15px;font-weight:600;letter-spacing:.01em;
+    border:none;border-radius:var(--r-md);
+    padding:13px 22px;
+    box-shadow:var(--shadow-sm);
+    transition:background .15s ease,box-shadow .15s ease,transform .1s ease;
+  }
+  .btn-primary:hover{background:var(--primary-hover);box-shadow:var(--shadow-md);}
+  .btn-primary:active{transform:translateY(1px);}
+  .btn-inverse{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    background:#fff;color:var(--primary);
+    font-size:15px;font-weight:700;letter-spacing:.01em;
+    border:none;border-radius:var(--r-md);
+    padding:13px 22px;
+    box-shadow:var(--shadow-md);
+  }
+  .btn-inverse:hover{box-shadow:var(--shadow-lg);}
+
+  /* ── 필터 ───────────────────────────────────────── */
+  .filters{padding:16px 20px 4px;display:flex;flex-direction:column;gap:10px;}
+  .filter-row-label{font-size:11.5px;font-weight:700;color:var(--text-muted);letter-spacing:.02em;}
+  .status-filter{display:flex;flex-wrap:wrap;gap:8px;}
+  .status-chip{
+    border:1px solid var(--border);background:var(--surface);color:var(--text-muted);
+    border-radius:var(--r-default);padding:7px 14px;font-size:13px;font-weight:600;
+    transition:all .12s ease;
+  }
+  .status-chip.active[data-status="전체"]{background:var(--text);border-color:var(--text);color:#fff;}
+  .status-chip.active[data-status="접수"]{background:var(--primary-container);border-color:var(--primary-container);color:var(--on-primary-container);}
+  .status-chip.active[data-status="처리중"]{background:var(--primary);border-color:var(--primary);color:var(--on-primary);}
+  .status-chip.active[data-status="완료"]{background:var(--secondary-container);border-color:var(--secondary-container);color:var(--on-secondary-container);}
+
+  .category-filter{
+    display:flex;gap:8px;overflow-x:auto;
+    padding-bottom:6px;
+    scrollbar-width:thin;
+  }
+  .category-filter::-webkit-scrollbar{height:5px;}
+  .category-filter::-webkit-scrollbar-thumb{background:var(--border);border-radius:var(--r-full);}
+  .category-chip{
+    flex:0 0 auto;
+    border:1px solid var(--border);background:var(--surface);color:var(--text-muted);
+    border-radius:var(--r-full);padding:7px 15px;font-size:13px;font-weight:600;
+    white-space:nowrap;
+  }
+  .category-chip.active{background:var(--primary);border-color:var(--primary);color:var(--on-primary);}
+
+  /* ── 뱃지 ───────────────────────────────────────── */
+  .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:var(--r-full);font-size:11.5px;font-weight:700;white-space:nowrap;}
+  .badge-received{background:var(--primary-container);color:var(--on-primary-container);}
+  .badge-progress{background:var(--primary);color:var(--on-primary);}
+  .badge-done{background:var(--secondary-container);color:var(--on-secondary-container);}
+  .badge-category{background:transparent;border:1px solid var(--border);color:var(--text-muted);font-weight:600;}
+
+  .thumb-icon{color:var(--placeholder-icon);}
+
+  /* ══════════════════════ 안 1 · 리스트형 ══════════════════════ */
+  .hero-v1{
+    background:var(--primary);
+    color:var(--on-primary);
+    padding:30px 20px 34px;
+    text-align:center;
+  }
+  .hero-v1 h1{
+    font-family:var(--font-display);
+    font-size:clamp(24px,5.5vw,32px);
+    line-height:1.3;
+    margin-bottom:8px;
+  }
+  .hero-v1 p{
+    font-size:13.5px;
+    color:rgba(255,255,255,.88);
+    max-width:36ch;margin:0 auto 18px;
+    line-height:1.6;
+  }
+  .content-v1{max-width:1120px;margin:0 auto;padding:0 20px 8px;}
+  .grid-v1{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px;}
+  @media(min-width:768px){.grid-v1{grid-template-columns:repeat(2,1fr);}}
+  @media(min-width:1024px){.grid-v1{grid-template-columns:repeat(3,1fr);gap:12px;}}
+
+  .card-v1{
+    display:flex;gap:12px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--r-default);
+    box-shadow:var(--shadow-sm);
+    padding:12px;
+  }
+  .v1-thumb{width:60px;height:60px;flex:0 0 60px;border-radius:9px;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;}
+  .v1-thumb svg{width:20px;height:20px;}
+  .v1-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
+  .v1-top{display:flex;gap:5px;flex-wrap:wrap;}
+  .v1-title{font-size:14.5px;font-weight:700;line-height:1.35;}
+  .v1-excerpt{font-size:12px;color:var(--text-muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .v1-meta{font-size:11px;color:var(--text-muted);}
+
+  /* ══════════════════════ 안 2 · 매거진형 ══════════════════════ */
+  .hero-v2{
+    background:var(--surface);
+    padding:48px 24px 40px;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+  }
+  .hero-v2 h1{
+    font-family:var(--font-display);
+    font-size:clamp(24px,5vw,30px);
+    line-height:1.4;
+    margin-bottom:14px;
+  }
+  .hero-v2 p{
+    font-size:15.5px;color:var(--text-muted);line-height:1.75;
+    max-width:38ch;margin:0 auto 26px;
+  }
+  .flow{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
+  .flow-step{display:flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;color:var(--text-muted);}
+  .flow-step .badge{margin-right:2px;}
+  .flow-arrow{color:var(--border);font-size:14px;}
+  .content-v2{max-width:1120px;margin:0 auto;padding:36px 24px 8px;}
+  .grid-v2{display:grid;grid-template-columns:1fr;gap:28px;}
+  @media(min-width:768px){.grid-v2{grid-template-columns:repeat(2,1fr);}}
+  @media(min-width:1024px){.grid-v2{grid-template-columns:repeat(3,1fr);gap:32px;}}
+
+  .card-v2{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--r-lg);
+    box-shadow:var(--shadow-sm);
+    overflow:hidden;
+    transition:box-shadow .15s ease;
+  }
+  .card-v2:hover{box-shadow:var(--shadow-md);}
+  .v2-thumb{width:100%;aspect-ratio:4/3;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;}
+  .v2-thumb svg{width:40px;height:40px;}
+  .v2-body{padding:22px;display:flex;flex-direction:column;gap:11px;}
+  .v2-top{display:flex;gap:6px;}
+  .v2-title{font-size:18.5px;font-weight:700;line-height:1.42;}
+  .v2-excerpt{font-size:14.5px;color:var(--text-muted);line-height:1.75;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  .v2-meta{font-size:12.5px;color:var(--text-muted);}
+
+  /* ══════════════════════ 안 3 · 균형형 ══════════════════════ */
+  .hero-v3{
+    background:var(--surface);
+    padding:36px 20px 0;
+    text-align:center;
+    border-bottom:1px solid var(--border);
+  }
+  .hero-v3 h1{
+    font-family:var(--font-display);
+    font-size:clamp(24px,5.2vw,29px);
+    line-height:1.35;
+    margin-bottom:8px;
+  }
+  .hero-v3 p{
+    font-size:14.5px;color:var(--text-muted);line-height:1.6;
+    max-width:36ch;margin:0 auto 20px;
+  }
+  .hero-v3 .btn-primary{margin-bottom:24px;}
+  .stat-strip{
+    display:flex;justify-content:center;gap:0;
+    max-width:520px;margin:0 auto;
+    background:var(--primary-container);
+    border-radius:var(--r-lg) var(--r-lg) 0 0;
+    overflow:hidden;
+  }
+  .stat-cell{flex:1;padding:14px 8px 16px;text-align:center;}
+  .stat-cell + .stat-cell{border-left:1px solid rgba(255,255,255,.6);}
+  .stat-num{font-size:20px;font-weight:800;color:var(--on-primary-container);font-variant-numeric:tabular-nums;}
+  .stat-label{font-size:11.5px;color:var(--on-primary-container);opacity:.8;margin-top:2px;}
+  .content-v3{max-width:1120px;margin:0 auto;padding:28px 20px 8px;}
+  .grid-v3{display:grid;grid-template-columns:1fr;gap:18px;}
+  @media(min-width:768px){.grid-v3{grid-template-columns:repeat(2,1fr);}}
+  @media(min-width:1024px){.grid-v3{grid-template-columns:repeat(3,1fr);gap:20px;}}
+
+  .card-v3{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--r-lg);
+    box-shadow:var(--shadow-sm);
+    overflow:hidden;
+    transition:box-shadow .15s ease;
+  }
+  .card-v3:hover{box-shadow:var(--shadow-md);}
+  .v3-thumb{width:100%;height:132px;background:var(--placeholder-bg);display:flex;align-items:center;justify-content:center;}
+  .v3-thumb svg{width:30px;height:30px;}
+  .v3-body{padding:16px;display:flex;flex-direction:column;gap:8px;}
+  .v3-top{display:flex;gap:6px;}
+  .v3-title{font-size:16px;font-weight:700;line-height:1.4;}
+  .v3-excerpt{font-size:13.5px;color:var(--text-muted);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .v3-meta{font-size:12px;color:var(--text-muted);}
+</style>
+</head>
+<body>
+
+  <div class="switcher" role="tablist" aria-label="시안 전환">
+    <button class="active" data-draft="1" role="tab" aria-selected="true">
+      <strong>안 1 · 리스트형</strong>
+      <span>정보 빽빽 · 사진 작게 · 강한 한 줄</span>
+    </button>
+    <button data-draft="2" role="tab" aria-selected="false">
+      <strong>안 2 · 매거진형</strong>
+      <span>여유 있게 · 사진 크게 · 차분한 안내</span>
+    </button>
+    <button data-draft="3" role="tab" aria-selected="false">
+      <strong>안 3 · 균형형</strong>
+      <span>적당히 · 사진 중간 · 헤드라인+현황</span>
+    </button>
+  </div>
+
+  <!-- ══════════════════════ 안 1 ══════════════════════ -->
+  <main class="draft active" id="draft-1">
+    <header class="site-header">
+      <img src="icons/icon-192.png" alt="">
+      <span class="org-name">위스테이별내사회적협동조합</span>
+    </header>
+
+    <section class="hero-v1">
+      <h1>불편하면, 바로 남기세요</h1>
+      <p>동네에서 겪은 불편이나 제안을 남기면 위스테이별내가 확인하고, 처리 상황을 접수 · 처리중 · 완료로 알려드립니다.</p>
+      <button class="btn-inverse">의견 남기기</button>
+    </section>
+
+    <div class="content-v1">
+      <div class="filters">
+        <div>
+          <div class="filter-row-label">처리 상태</div>
+          <div class="status-filter" id="status-filter-1"></div>
+        </div>
+        <div>
+          <div class="filter-row-label">분야</div>
+          <div class="category-filter" id="category-filter-1"></div>
+        </div>
+      </div>
+      <div class="grid-v1" id="grid-1"></div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="foot-org">위스테이별내사회적협동조합</div>
+      <p class="foot-desc">우리 동네 목소리함은 입주민이 남긴 불편과 제안을 모아 처리 과정을 알려드리는 곳입니다.</p>
+      <div class="foot-copy">© 2026 위스테이별내사회적협동조합</div>
+    </footer>
+  </main>
+
+  <!-- ══════════════════════ 안 2 ══════════════════════ -->
+  <main class="draft" id="draft-2">
+    <header class="site-header">
+      <img src="icons/icon-192.png" alt="">
+      <span class="org-name">위스테이별내사회적협동조합</span>
+    </header>
+
+    <section class="hero-v2">
+      <h1>우리 동네 이야기를 남겨주세요</h1>
+      <p>골목의 작은 불편이나 제안을 남기면, 위스테이별내사회적협동조합이 확인한 뒤 처리 과정을 하나씩 알려드립니다.</p>
+      <div class="flow">
+        <span class="flow-step"><span class="badge badge-received">접수</span>남겨주시면</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step"><span class="badge badge-progress">처리중</span>확인하고</span>
+        <span class="flow-arrow">→</span>
+        <span class="flow-step"><span class="badge badge-done">완료</span>알려드려요</span>
+      </div>
+      <button class="btn-primary">의견 남기기</button>
+    </section>
+
+    <div class="content-v2">
+      <div class="filters">
+        <div>
+          <div class="filter-row-label">처리 상태</div>
+          <div class="status-filter" id="status-filter-2"></div>
+        </div>
+        <div>
+          <div class="filter-row-label">분야</div>
+          <div class="category-filter" id="category-filter-2"></div>
+        </div>
+      </div>
+      <div class="grid-v2" id="grid-2"></div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="foot-org">위스테이별내사회적협동조합</div>
+      <p class="foot-desc">우리 동네 목소리함은 입주민이 남긴 불편과 제안을 모아 처리 과정을 알려드리는 곳입니다.</p>
+      <div class="foot-copy">© 2026 위스테이별내사회적협동조합</div>
+    </footer>
+  </main>
+
+  <!-- ══════════════════════ 안 3 ══════════════════════ -->
+  <main class="draft" id="draft-3">
+    <header class="site-header">
+      <img src="icons/icon-192.png" alt="">
+      <span class="org-name">위스테이별내사회적협동조합</span>
+    </header>
+
+    <section class="hero-v3">
+      <h1>동네 목소리, 모아서 바꿉니다</h1>
+      <p>남겨주신 의견은 접수 후 처리 과정을 거쳐 완료까지 알려드려요.</p>
+      <button class="btn-primary">의견 남기기</button>
+      <div class="stat-strip">
+        <div class="stat-cell"><div class="stat-num" id="stat-received">0</div><div class="stat-label">접수</div></div>
+        <div class="stat-cell"><div class="stat-num" id="stat-progress">0</div><div class="stat-label">처리중</div></div>
+        <div class="stat-cell"><div class="stat-num" id="stat-done">0</div><div class="stat-label">완료</div></div>
+      </div>
+    </section>
+
+    <div class="content-v3">
+      <div class="filters">
+        <div>
+          <div class="filter-row-label">처리 상태</div>
+          <div class="status-filter" id="status-filter-3"></div>
+        </div>
+        <div>
+          <div class="filter-row-label">분야</div>
+          <div class="category-filter" id="category-filter-3"></div>
+        </div>
+      </div>
+      <div class="grid-v3" id="grid-3"></div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="foot-org">위스테이별내사회적협동조합</div>
+      <p class="foot-desc">우리 동네 목소리함은 입주민이 남긴 불편과 제안을 모아 처리 과정을 알려드리는 곳입니다.</p>
+      <div class="foot-copy">© 2026 위스테이별내사회적협동조합</div>
+    </footer>
+  </main>
+
+<script>
+  const POSTS = [
+    {title:'골목 가로등이 계속 꺼져 있어요', excerpt:'저녁마다 골목 초입 가로등이 켜지지 않아 밤에 다니기 무서워요. 벌써 일주일째 이런 상태예요.', status:'접수', category:'시설관리', author:'3동 김OO', date:'2026.08.12'},
+    {title:'놀이터 그네가 삐걱거려요', excerpt:'아이들이 타는 그네 사슬에서 계속 삐걱거리는 소리가 나요. 안전 점검이 필요할 것 같아요.', status:'처리중', category:'시설관리', author:'7동 박OO', date:'2026.08.10'},
+    {title:'분리수거장에 안내판을 달아주세요', excerpt:'품목별로 어디에 버려야 하는지 헷갈려하는 입주민이 많아요. 안내판이 있으면 좋겠습니다.', status:'완료', category:'환경미화', author:'1동 이OO', date:'2026.08.03'},
+    {title:'단지 내 자전거 거치대가 부족해요', excerpt:'출퇴근 시간마다 거치대가 꽉 차서 자전거를 세울 곳이 없어요. 몇 자리만 더 늘려주시면 좋겠어요.', status:'접수', category:'생활편의', author:'5동 최OO', date:'2026.08.15'},
+    {title:'경로당 앞 벤치를 늘려주세요', excerpt:'어르신들이 앉아 쉴 곳이 부족합니다. 벤치를 두 개 정도 더 놓아주시면 감사하겠습니다.', status:'완료', category:'생활편의', author:'2동 정OO', date:'2026.07.28'},
+  ];
+
+  const CATEGORIES = ['전체','시설관리','환경미화','생활편의','주차','안전','소음'];
+  const STATUSES = ['전체','접수','처리중','완료'];
+  const STATUS_SLUG = {'접수':'received','처리중':'progress','완료':'done'};
+
+  const PHOTO_ICON = `<svg class="thumb-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.6"/>
+    <circle cx="8.5" cy="9.5" r="1.4" fill="currentColor"/>
+    <path d="M21 15.5l-5.3-5.3a1 1 0 0 0-1.4 0L6 18.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+
+  function badges(post){
+    return `<span class="badge badge-${STATUS_SLUG[post.status]}">${post.status}</span><span class="badge badge-category">${post.category}</span>`;
+  }
+
+  function renderCard(post, variant){
+    if(variant === 1){
+      return `<article class="card-v1">
+        <div class="v1-thumb">${PHOTO_ICON}</div>
+        <div class="v1-body">
+          <div class="v1-top">${badges(post)}</div>
+          <h3 class="v1-title">${post.title}</h3>
+          <p class="v1-excerpt">${post.excerpt}</p>
+          <div class="v1-meta">${post.author} · ${post.date}</div>
+        </div>
+      </article>`;
+    }
+    if(variant === 2){
+      return `<article class="card-v2">
+        <div class="v2-thumb">${PHOTO_ICON}</div>
+        <div class="v2-body">
+          <div class="v2-top">${badges(post)}</div>
+          <h3 class="v2-title">${post.title}</h3>
+          <p class="v2-excerpt">${post.excerpt}</p>
+          <div class="v2-meta">${post.author} · ${post.date}</div>
+        </div>
+      </article>`;
+    }
+    return `<article class="card-v3">
+      <div class="v3-thumb">${PHOTO_ICON}</div>
+      <div class="v3-body">
+        <div class="v3-top">${badges(post)}</div>
+        <h3 class="v3-title">${post.title}</h3>
+        <p class="v3-excerpt">${post.excerpt}</p>
+        <div class="v3-meta">${post.author} · ${post.date}</div>
+      </div>
+    </article>`;
+  }
+
+  function renderFilterGroup(container, items, isStatus){
+    container.innerHTML = items.map((label, i) => {
+      const cls = isStatus ? 'status-chip' : 'category-chip';
+      const active = i === 0 ? ' active' : '';
+      const attr = isStatus ? ` data-status="${label}"` : '';
+      return `<button class="${cls}${active}"${attr}>${label}</button>`;
+    }).join('');
+    container.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        container.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  }
+
+  for(let v = 1; v <= 3; v++){
+    document.getElementById(`grid-${v}`).innerHTML = POSTS.map(p => renderCard(p, v)).join('');
+    renderFilterGroup(document.getElementById(`status-filter-${v}`), STATUSES, true);
+    renderFilterGroup(document.getElementById(`category-filter-${v}`), CATEGORIES, false);
+  }
+
+  document.getElementById('stat-received').textContent = POSTS.filter(p => p.status === '접수').length;
+  document.getElementById('stat-progress').textContent = POSTS.filter(p => p.status === '처리중').length;
+  document.getElementById('stat-done').textContent = POSTS.filter(p => p.status === '완료').length;
+
+  document.querySelectorAll('.switcher button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.switcher button').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-selected', 'true');
+      document.querySelectorAll('.draft').forEach(d => d.classList.remove('active'));
+      document.getElementById(`draft-${btn.dataset.draft}`).classList.add('active');
+      window.scrollTo({top:0, behavior:'instant'});
+    });
+  });
+</script>
+</body>
+</html>

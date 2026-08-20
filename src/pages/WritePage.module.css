@@ -1,0 +1,24 @@
+.content {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--sp-lg) var(--sp-md) var(--sp-xl);
+}
+.pageTitle {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: var(--sp-lg);
+}
+.field {
+  margin-bottom: var(--sp-lg);
+}
+.categoryRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-sm);
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-sm);
+  margin-top: var(--sp-xl);
+}

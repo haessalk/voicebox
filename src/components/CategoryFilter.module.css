@@ -1,0 +1,9 @@
+.row {
+  display: flex;
+  gap: var(--sp-sm);
+  overflow-x: auto;
+  padding-bottom: var(--sp-xs);
+  scrollbar-width: thin;
+}
+.row::-webkit-scrollbar { height: 5px; }
+.row::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--r-full); }

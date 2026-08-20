@@ -1,0 +1,134 @@
+:root {
+  --primary: #7A4FE0;
+  --primary-hover: #6A3FD0;
+  --primary-container: #EDE5FF;
+  --on-primary: #FFFFFF;
+  --on-primary-container: #4A2E96;
+
+  --secondary: #2FAE72;
+  --secondary-container: #E1F5EA;
+  --on-secondary: #FFFFFF;
+  --on-secondary-container: #1C6B45;
+
+  --bg: #F8F5FF;
+  --surface: #FFFFFF;
+  --text: #241B3A;
+  --text-muted: #6B5E8A;
+  --border: #E4DAFB;
+
+  --error: #D6394A;
+  --error-container: #FBE4E6;
+  --on-error-container: #8C1F2C;
+
+  --placeholder-bg: #E7E2F2;
+  --placeholder-icon: #B0A3D6;
+
+  --shadow-sm: 0 1px 3px rgba(122, 79, 224, 0.10);
+  --shadow-md: 0 6px 16px rgba(122, 79, 224, 0.14);
+  --shadow-lg: 0 16px 32px rgba(122, 79, 224, 0.18);
+
+  --r-sm: 8px;
+  --r-default: 12px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-full: 999px;
+
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 16px;
+  --sp-lg: 24px;
+  --sp-xl: 40px;
+  --sp-2xl: 64px;
+
+  --font-display: 'Jua', 'Pretendard', system-ui, sans-serif;
+  --font-body: 'Pretendard', -apple-system, 'Malgun Gothic', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #root { margin: 0; padding: 0; height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+img, svg { display: block; }
+button { font-family: inherit; cursor: pointer; }
+h1, h2, h3, p { margin: 0; }
+a { color: inherit; text-decoration: none; }
+
+/* ── 버튼 ─────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  background: var(--primary); color: var(--on-primary);
+  font-size: 15px; font-weight: 600; letter-spacing: 0.01em;
+  border: none; border-radius: var(--r-md);
+  padding: var(--sp-sm) var(--sp-lg);
+  box-shadow: var(--shadow-sm);
+  transition: background .15s ease, box-shadow .15s ease, transform .1s ease;
+}
+.btn-primary:hover { background: var(--primary-hover); box-shadow: var(--shadow-md); }
+.btn-primary:active { transform: translateY(1px); }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  background: var(--surface); color: var(--text);
+  font-size: 15px; font-weight: 600; letter-spacing: 0.01em;
+  border: 1px solid var(--border); border-radius: var(--r-md);
+  padding: var(--sp-sm) var(--sp-lg);
+}
+.btn-secondary:hover { background: var(--bg); }
+
+.btn-inverse {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  background: #fff; color: var(--primary);
+  font-size: 15px; font-weight: 700; letter-spacing: 0.01em;
+  border: none; border-radius: var(--r-md);
+  padding: var(--sp-sm) var(--sp-lg);
+  box-shadow: var(--shadow-md);
+}
+.btn-inverse:hover { box-shadow: var(--shadow-lg); }
+
+/* ── 배지 / 칩 ─────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: var(--sp-xs) var(--sp-sm);
+  border-radius: var(--r-full);
+  font-size: 13px; font-weight: 500; letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+.badge-received { background: var(--primary-container); color: var(--on-primary-container); }
+.badge-progress { background: var(--primary); color: var(--on-primary); }
+.badge-done { background: var(--secondary-container); color: var(--on-secondary-container); }
+
+.chip-category {
+  flex: 0 0 auto;
+  border: 1px solid var(--border); background: var(--surface); color: var(--text-muted);
+  border-radius: var(--r-full); padding: var(--sp-sm) var(--sp-md);
+  font-size: 13px; font-weight: 500;
+  white-space: nowrap;
+}
+.chip-category.active { background: var(--primary); border-color: var(--primary); color: var(--on-primary); }
+
+/* ── 입력 폼 ───────────────────────────────────── */
+.field-label {
+  display: block; font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: var(--sp-sm);
+}
+.input-field, .textarea-field {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px; line-height: 26px;
+  border-radius: var(--r-sm);
+  padding: var(--sp-sm) var(--sp-md);
+}
+.input-field:focus, .textarea-field:focus {
+  outline: none; border-color: var(--primary);
+}
+.textarea-field { min-height: 160px; resize: vertical; }
+.input-field.error, .textarea-field.error { border-color: var(--error); }
+.field-error-text { color: var(--error); font-size: 13px; margin-top: var(--sp-xs); }

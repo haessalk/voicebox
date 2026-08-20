@@ -1,0 +1,27 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding: var(--sp-sm) var(--sp-md);
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-sm);
+  flex: 0 0 auto;
+}
+.orgName {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

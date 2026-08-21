@@ -1,6 +1,8 @@
 .header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
   padding: var(--sp-sm) var(--sp-md);
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -24,4 +26,21 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  flex: 0 0 auto;
+}
+.authBtn {
+  padding: 7px 14px;
+  font-size: 13px;
+}
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-full);
+  background: var(--placeholder-bg);
+  flex: 0 0 auto;
 }

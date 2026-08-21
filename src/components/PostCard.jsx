@@ -8,7 +8,11 @@ export default function PostCard({ post }) {
   return (
     <Link to={`/posts/${post.id}`} className={styles.card}>
       <div className={styles.thumb}>
-        <PhotoIcon size={20} />
+        {post.photo_url ? (
+          <img className={styles.thumbImg} src={post.photo_url} alt="" />
+        ) : (
+          <PhotoIcon size={20} />
+        )}
       </div>
       <div className={styles.body}>
         <div className={styles.top}>

@@ -90,6 +90,15 @@ a { color: inherit; text-decoration: none; }
 }
 .btn-inverse:hover { box-shadow: var(--shadow-lg); }
 
+.btn-google {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  background: #FFFFFF; color: var(--text);
+  font-size: 15px; font-weight: 600; letter-spacing: 0.01em;
+  border: 1px solid var(--border); border-radius: var(--r-md);
+  padding: var(--sp-sm) var(--sp-lg);
+}
+.btn-google:hover { background: var(--bg); }
+
 /* ── 배지 / 칩 ─────────────────────────────────── */
 .badge {
   display: inline-flex; align-items: center;
@@ -132,3 +141,20 @@ a { color: inherit; text-decoration: none; }
 .textarea-field { min-height: 160px; resize: vertical; }
 .input-field.error, .textarea-field.error { border-color: var(--error); }
 .field-error-text { color: var(--error); font-size: 13px; margin-top: var(--sp-xs); }
+
+/* ── 토스트 ───────────────────────────────────── */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--sp-xl);
+  transform: translateX(-50%);
+  background: var(--text);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: var(--r-full);
+  box-shadow: var(--shadow-lg);
+  z-index: 400;
+  white-space: nowrap;
+}

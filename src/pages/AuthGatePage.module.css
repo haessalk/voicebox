@@ -1,0 +1,49 @@
+.wrap {
+  min-height: calc(100vh - 260px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-lg) var(--sp-md);
+}
+.card {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--sp-xl);
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+}
+.icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--r-sm);
+  margin: 0 auto var(--sp-md);
+}
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: var(--sp-sm);
+}
+.desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: var(--sp-lg);
+}
+.googleBtn {
+  width: 100%;
+}
+.switchLink {
+  display: block;
+  margin-top: var(--sp-lg);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.switchLink a {
+  color: var(--primary);
+  font-weight: 600;
+}
+.error {
+  margin-top: var(--sp-md);
+}

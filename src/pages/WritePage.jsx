@@ -2,14 +2,15 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PhotoUpload from '../components/PhotoUpload';
 import { supabase } from '../lib/supabaseClient';
+import { useAuth } from '../lib/AuthContext';
 import { CATEGORIES } from '../data/posts';
 import styles from './WritePage.module.css';
 
 export default function WritePage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [author, setAuthor] = useState('');
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [photo, setPhoto] = useState(null);
   const [errors, setErrors] = useState({});
@@ -26,19 +27,38 @@ export default function WritePage() {
     const nextErrors = {};
     if (!title.trim()) nextErrors.title = '제목을 입력해 주세요.';
     if (!content.trim()) nextErrors.content = '내용을 입력해 주세요.';
-    if (!author.trim()) nextErrors.author = '작성자를 입력해 주세요.';
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
     setSubmitting(true);
     setSubmitError(null);
 
-    // 사진 업로드(Storage 연동)는 아직 없어서 photo_url은 비워서 저장합니다.
+    let photoUrl = null;
+    if (photo) {
+      const ext = photo.file.name.split('.').pop();
+      const path = `${crypto.randomUUID()}.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from('photos')
+        .upload(path, photo.file);
+
+      if (uploadError) {
+        setSubmitting(false);
+        setSubmitError('사진을 올리지 못했어요. 잠시 후 다시 시도해 주세요.');
+        return;
+      }
+
+      photoUrl = supabase.storage.from('photos').getPublicUrl(path).data.publicUrl;
+    }
+
+    const author = user.user_metadata?.full_name || user.user_metadata?.name || user.email;
+
     const { error } = await supabase.from('posts').insert({
       title: title.trim(),
       content: content.trim(),
-      author: author.trim(),
+      author,
       category,
+      photo_url: photoUrl,
+      user_id: user.id,
     });
 
     setSubmitting(false);
@@ -82,21 +102,6 @@ export default function WritePage() {
             placeholder="겪은 불편이나 제안을 자세히 적어주세요."
           />
           {errors.content && <p className="field-error-text">{errors.content}</p>}
-        </div>
-
-        <div className={styles.field}>
-          <label className="field-label" htmlFor="author">
-            작성자
-          </label>
-          <input
-            id="author"
-            className={`input-field ${errors.author ? 'error' : ''}`}
-            type="text"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-            placeholder="예: 3동 김OO"
-          />
-          {errors.author && <p className="field-error-text">{errors.author}</p>}
         </div>
 
         <div className={styles.field}>

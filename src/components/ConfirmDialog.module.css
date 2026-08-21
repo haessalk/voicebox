@@ -1,0 +1,29 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(36, 27, 58, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-md);
+  z-index: 300;
+}
+.card {
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--sp-lg);
+  max-width: 360px;
+  width: 100%;
+}
+.message {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: var(--sp-lg);
+}
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-sm);
+}

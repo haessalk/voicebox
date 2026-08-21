@@ -18,7 +18,7 @@ export default function PostCard({ post }) {
         <h3 className={styles.title}>{post.title}</h3>
         <p className={styles.excerpt}>{post.content}</p>
         <div className={styles.meta}>
-          {post.author} · {formatDateTime(post.createdAt)}
+          {post.author} · {formatDateTime(post.created_at)}
         </div>
       </div>
     </Link>

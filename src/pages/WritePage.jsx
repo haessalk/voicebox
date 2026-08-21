@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PhotoUpload from '../components/PhotoUpload';
+import { supabase } from '../lib/supabaseClient';
 import { CATEGORIES } from '../data/posts';
 import styles from './WritePage.module.css';
 
@@ -8,24 +9,45 @@ export default function WritePage() {
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [author, setAuthor] = useState('');
   const [category, setCategory] = useState(CATEGORIES[0]);
   const [photo, setPhoto] = useState(null);
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState(null);
+  const [submitting, setSubmitting] = useState(false);
 
   function handlePhotoChange(file) {
     if (photo?.previewUrl) URL.revokeObjectURL(photo.previewUrl);
     setPhoto(file ? { file, previewUrl: URL.createObjectURL(file) } : null);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const nextErrors = {};
     if (!title.trim()) nextErrors.title = '제목을 입력해 주세요.';
     if (!content.trim()) nextErrors.content = '내용을 입력해 주세요.';
+    if (!author.trim()) nextErrors.author = '작성자를 입력해 주세요.';
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    // 저장 기능은 아직 연결되지 않았습니다 — 화면 흐름만 확인합니다.
+    setSubmitting(true);
+    setSubmitError(null);
+
+    // 사진 업로드(Storage 연동)는 아직 없어서 photo_url은 비워서 저장합니다.
+    const { error } = await supabase.from('posts').insert({
+      title: title.trim(),
+      content: content.trim(),
+      author: author.trim(),
+      category,
+    });
+
+    setSubmitting(false);
+
+    if (error) {
+      setSubmitError('저장하지 못했어요. 잠시 후 다시 시도해 주세요.');
+      return;
+    }
+
     navigate('/');
   }
 
@@ -63,6 +85,21 @@ export default function WritePage() {
         </div>
 
         <div className={styles.field}>
+          <label className="field-label" htmlFor="author">
+            작성자
+          </label>
+          <input
+            id="author"
+            className={`input-field ${errors.author ? 'error' : ''}`}
+            type="text"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+            placeholder="예: 3동 김OO"
+          />
+          {errors.author && <p className="field-error-text">{errors.author}</p>}
+        </div>
+
+        <div className={styles.field}>
           <span className="field-label">분야</span>
           <div className={styles.categoryRow}>
             {CATEGORIES.map((c) => (
@@ -84,12 +121,14 @@ export default function WritePage() {
           <PhotoUpload photo={photo} onChange={handlePhotoChange} />
         </div>
 
+        {submitError && <p className="field-error-text">{submitError}</p>}
+
         <div className={styles.actions}>
           <button type="button" className="btn-secondary" onClick={() => navigate(-1)}>
             취소
           </button>
-          <button type="submit" className="btn-primary">
-            등록
+          <button type="submit" className="btn-primary" disabled={submitting}>
+            {submitting ? '등록 중…' : '등록'}
           </button>
         </div>
       </form>

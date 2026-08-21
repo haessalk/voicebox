@@ -16,10 +16,41 @@ export default function WritePage() {
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState(null);
 
   function handlePhotoChange(file) {
     if (photo?.previewUrl) URL.revokeObjectURL(photo.previewUrl);
     setPhoto(file ? { file, previewUrl: URL.createObjectURL(file) } : null);
+  }
+
+  async function handleAiDraft() {
+    if (!content.trim() || aiLoading) return;
+    setAiLoading(true);
+    setAiError(null);
+
+    try {
+      const res = await fetch('/api/generate-draft', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ draft: content }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setAiError(data.error || 'AI 작성도우미를 사용하지 못했어요.');
+        return;
+      }
+
+      setTitle(data.title);
+      setContent(data.content);
+      setCategory(data.category);
+      setErrors({});
+    } catch {
+      setAiError('AI 작성도우미를 사용하지 못했어요. 잠시 후 다시 시도해 주세요.');
+    } finally {
+      setAiLoading(false);
+    }
   }
 
   async function handleSubmit(e) {
@@ -91,17 +122,28 @@ export default function WritePage() {
         </div>
 
         <div className={styles.field}>
-          <label className="field-label" htmlFor="content">
-            내용
-          </label>
+          <div className={styles.fieldHeader}>
+            <label className="field-label" htmlFor="content">
+              내용
+            </label>
+            <button
+              type="button"
+              className={`btn-secondary ${styles.aiButton}`}
+              onClick={handleAiDraft}
+              disabled={!content.trim() || aiLoading}
+            >
+              {aiLoading ? '다듬는 중…' : 'AI 작성도우미'}
+            </button>
+          </div>
           <textarea
             id="content"
             className={`textarea-field ${errors.content ? 'error' : ''}`}
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="겪은 불편이나 제안을 자세히 적어주세요."
+            placeholder="겪은 불편이나 제안을 짧게라도 적어주세요. AI 작성도우미로 다듬을 수 있어요."
           />
           {errors.content && <p className="field-error-text">{errors.content}</p>}
+          {aiError && <p className="field-error-text">{aiError}</p>}
         </div>
 
         <div className={styles.field}>

@@ -11,6 +11,22 @@
 .field {
   margin-bottom: var(--sp-lg);
 }
+.fieldHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-sm);
+  margin-bottom: var(--sp-sm);
+}
+.fieldHeader :global(.field-label) {
+  margin-bottom: 0;
+}
+.aiButton {
+  padding: 6px 12px;
+  font-size: 12.5px;
+  color: var(--primary);
+  border-color: var(--primary-container);
+}
 .categoryRow {
   display: flex;
   flex-wrap: wrap;

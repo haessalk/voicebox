@@ -25,6 +25,7 @@ export default async function handler(req, res) {
   }
 
   const draft = (req.body?.draft ?? '').trim();
+  console.log('DEBUG typeof req.body:', typeof req.body, 'draft:', JSON.stringify(draft));
   if (!draft) {
     res.status(400).json({ error: '짧게라도 내용을 적어주셔야 다듬을 수 있어요.' });
     return;
